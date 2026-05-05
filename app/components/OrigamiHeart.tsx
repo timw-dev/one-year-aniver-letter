@@ -4,49 +4,40 @@
 import { motion, Variants } from 'framer-motion';
 
 interface OrigamiHeartProps {
-  size: 'sm' | 'md' | 'lg';
+  size: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl';
   className?: string;
   delay?: number;
-  isBurst?: boolean; // Thêm cờ này để phân biệt tim nổ và tim tĩnh
+  mode?: 'burst' | 'float' | 'static';
+  noShadow?: boolean; // THÊM CÔNG TẮC TẮT BÓNG ĐỔ
 }
 
-export function OrigamiHeart({ size, className = '', delay = 0, isBurst = true }: OrigamiHeartProps) {
-  const sizeMap = {
-    sm: 45,
-    md: 70,
-    lg: 110,
-  };
-
+export function OrigamiHeart({ size, className = '', delay = 0, mode = 'static', noShadow = false }: OrigamiHeartProps) {
+  const sizeMap = { sm: 45, md: 70, lg: 110, xl: 160, '2xl': 220, '3xl': 300, '4xl': 420 };
   const width = sizeMap[size];
 
-  // Animation nổ tung ra từ phong bì rồi biến mất
   const burstVariants: Variants = {
     hidden: { opacity: 0, scale: 0.5, y: 20 },
     visible: { 
-      opacity: [0, 1, 1, 0], 
-      scale: 1, y: -120, x: (Math.random() - 0.5) * 100, rotate: (Math.random() - 0.5) * 45,
+      opacity: [0, 1, 1, 0], scale: 1, y: -120, x: (Math.random() - 0.5) * 100, rotate: (Math.random() - 0.5) * 45,
       transition: { duration: 3, delay: delay, ease: "easeOut" }
     }
   };
 
-  // Animation tĩnh dùng để trang trí quanh đám mây (Không bị biến mất)
   const floatVariants: Variants = {
     hidden: { opacity: 0, scale: 0.8 },
-    visible: { 
-      opacity: 1, scale: 1, 
-      transition: { duration: 1.5, delay: delay } 
-    }
+    visible: { opacity: 1, scale: 1, transition: { duration: 1.5, delay: delay } }
   };
 
   return (
     <motion.div
-      variants={isBurst ? burstVariants : floatVariants}
-      initial="hidden"
-      animate="visible"
+      variants={mode === 'burst' ? burstVariants : mode === 'float' ? floatVariants : {}}
+      initial={mode !== 'static' ? "hidden" : false}
+      animate={mode !== 'static' ? "visible" : false}
       className={`absolute ${className}`}
     >
       <svg width={width} height={width} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <g style={{ filter: 'drop-shadow(0 6px 6px rgba(200,50,80,0.15))' }}>
+        {/* Tắt filter nếu noShadow = true để cứu hiệu năng GPU lúc scale khổng lồ */}
+        <g style={{ filter: noShadow ? 'none' : 'drop-shadow(0 6px 6px rgba(200,50,80,0.15))' }}>
           <polygon points="5,40 25,15 50,35 15,55" fill="#FF9EB3" />
           <polygon points="15,55 50,35 50,90" fill="#FF728F" />
           <polygon points="95,40 75,15 50,35 85,55" fill="#F05A7E" />
