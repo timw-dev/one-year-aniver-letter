@@ -13,7 +13,7 @@ export function Envelope({ isOpened, onClick, children }: EnvelopeProps) {
   return (
     <motion.div
       onClick={onClick}
-      className="relative w-[300px] h-[200px] md:w-[400px] md:h-[260px] cursor-pointer mx-auto"
+      className="relative w-[300px] h-[195px] md:w-[500px] md:h-[325px] lg:w-[700px] lg:h-[455px] cursor-pointer mx-auto"
       style={{ perspective: 1200 }}
       whileHover={!isOpened ? { scale: 1.03 } : {}}
     >
@@ -56,28 +56,26 @@ export function Envelope({ isOpened, onClick, children }: EnvelopeProps) {
         <svg viewBox="0 0 400 260" className="absolute inset-0 w-full h-full" style={{ backfaceVisibility: "hidden" }}>
           <polygon points="0,0 400,0 200,140" fill="#ffffff" stroke="#f0f0f0" strokeWidth="2" />
           
-          {/* Cụm Dấu Sáp Trái Tim (Wax Seal) - Đặt chính xác tại đỉnh nắp (200, 140) */}
+          {/* Cụm Dấu Sáp Trái Tim (Wax Seal) */}
           <g transform="translate(175, 115)">
-            {/* Cốt sáp chính (Đổ bóng xịn xò) */}
             <path d="M25 45 C 25 45, 0 30, 0 15 C 0 5, 15 0, 25 10 C 35 0, 50 5, 50 15 C 50 30, 25 45, 25 45 Z" 
                   fill="#D63A60" 
                   filter="drop-shadow(0 4px 3px rgba(0,0,0,0.3))" 
                   stroke="#B8284A" strokeWidth="1" />
-            {/* Đường viền dập nổi bên trong */}
             <path d="M25 40 C 25 40, 5 28, 5 15 C 5 8, 15 4, 25 12 C 35 4, 45 8, 45 15 C 45 28, 25 40, 25 40 Z" 
                   fill="none" stroke="#E65A78" strokeWidth="1.5" />
-            {/* Chữ Open */}
             <text x="25" y="24" fontFamily="serif" fontSize="12" fill="#FFD1DC" textAnchor="middle" fontStyle="italic" fontWeight="bold">Open</text>
           </g>
         </svg>
 
         {/* === MẶT TRONG (Gradient hồng) === */}
-        <svg viewBox="0 0 400 260" className="absolute inset-0 w-full h-full" style={{ backfaceVisibility: "hidden", transform: "rotateX(180deg)" }}>
+        {/* SỬA LỖI HỞ NẮP: Dùng rotateY(180deg) thay vì rotateX để giữ nắp luôn dính vào cạnh trên */}
+        <svg viewBox="0 0 400 260" className="absolute inset-0 w-full h-full" style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}>
           <defs>
-            {/* Đổi chiều y1=1, y2=0 để khi lật ngược lại, gradient sẽ khớp với lòng phong bì */}
-            <linearGradient id="flapGrad" x1="0" y1="1" x2="0" y2="0">
-              <stop offset="0%" stopColor="#FFC8D6" />
-              <stop offset="100%" stopColor="#FF9EB3" />
+            {/* SỬA MÀU NẮP: y1=0 (bản lề) khớp màu với lòng thư, y2=1 (đỉnh sáp) nhạt dần */}
+            <linearGradient id="flapGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#FFC8D6" /> {/* Khớp màu hoàn hảo với lòng phong bì */}
+              <stop offset="100%" stopColor="#FFE4EC" /> {/* Nhạt dần về phía dấu sáp */}
             </linearGradient>
           </defs>
           <polygon points="0,0 400,0 200,140" fill="url(#flapGrad)" />

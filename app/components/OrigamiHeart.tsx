@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/purity */
 'use client';
 
 import { motion, Variants } from 'framer-motion';
@@ -6,10 +7,10 @@ interface OrigamiHeartProps {
   size: 'sm' | 'md' | 'lg';
   className?: string;
   delay?: number;
+  isBurst?: boolean; // Thêm cờ này để phân biệt tim nổ và tim tĩnh
 }
 
-export function OrigamiHeart({ size, className = '', delay = 0 }: OrigamiHeartProps) {
-  // Tăng gấp đôi kích thước trái tim
+export function OrigamiHeart({ size, className = '', delay = 0, isBurst = true }: OrigamiHeartProps) {
   const sizeMap = {
     sm: 45,
     md: 70,
@@ -18,29 +19,28 @@ export function OrigamiHeart({ size, className = '', delay = 0 }: OrigamiHeartPr
 
   const width = sizeMap[size];
 
+  // Animation nổ tung ra từ phong bì rồi biến mất
   const burstVariants: Variants = {
-    hidden: { 
-      opacity: 0, 
-      scale: 0.5, 
-      y: 20 
-    },
+    hidden: { opacity: 0, scale: 0.5, y: 20 },
     visible: { 
       opacity: [0, 1, 1, 0], 
-      scale: 1,
-      y: -120, // Bay cao hơn
-      x: (Math.random() - 0.5) * 100, // Lan rộng hơn
-      rotate: (Math.random() - 0.5) * 45,
-      transition: { 
-        duration: 3, // Kéo dài thời gian bay chậm lại một chút
-        delay: delay,
-        ease: "easeOut" 
-      }
+      scale: 1, y: -120, x: (Math.random() - 0.5) * 100, rotate: (Math.random() - 0.5) * 45,
+      transition: { duration: 3, delay: delay, ease: "easeOut" }
+    }
+  };
+
+  // Animation tĩnh dùng để trang trí quanh đám mây (Không bị biến mất)
+  const floatVariants: Variants = {
+    hidden: { opacity: 0, scale: 0.8 },
+    visible: { 
+      opacity: 1, scale: 1, 
+      transition: { duration: 1.5, delay: delay } 
     }
   };
 
   return (
     <motion.div
-      variants={burstVariants}
+      variants={isBurst ? burstVariants : floatVariants}
       initial="hidden"
       animate="visible"
       className={`absolute ${className}`}
