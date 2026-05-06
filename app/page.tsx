@@ -1,4 +1,3 @@
-import Image from "next/image";
 import IntroPhase from "./components/IntroPhase";
 
 export default function Home() {
