@@ -155,7 +155,7 @@ const letterPages: LetterPageData[] = [
       {
         id: "p2_4",
         type: "image",
-        src: "/imgs/random_daily4.jpg",
+        src: "/imgs/random_daily4.JPG",
         title: "Random happy dailys :3",
         position: "left-mid",
       },
